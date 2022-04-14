@@ -1,0 +1,25 @@
+{
+    "name": "timinh/docker-creator",
+    "description": "A simple cli tool to create integrate docker to Php projects",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Timinh\\DockerCreator\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gilles Robin",
+            "email": "gilles.robin@uca.fr"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^8.0",
+        "symfony/console": "^5.0|^6.0"
+    },
+    "bin": [
+        "bin/dock"
+    ]
+}

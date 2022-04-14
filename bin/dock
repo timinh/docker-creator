@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Application;
+use Timinh\DockerCreator\Commands\AddContainer;
+use Timinh\DockerCreator\Commands\AddGitlabCi;
+use Timinh\DockerCreator\Commands\AddMakefile;
+
+$root = dirname(__DIR__);
+
+if (!is_file(sprintf('%s/vendor/autoload.php', $root))) {
+    $root = dirname(__DIR__, 4);
+}
+
+require sprintf('%s/vendor/autoload.php', $root);
+
+$application = new Application();
+
+$application->add(new AddContainer());
+$application->add(new AddGitlabCi());
+$application->add(new AddMakefile());
+
+$application->run();
