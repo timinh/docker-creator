@@ -1,0 +1,48 @@
+version: '3.7'
+services:
+    app:
+        build:
+            context: ./
+            args:
+                APACHE_IMAGE: 'timinh/php-apache:8.1'
+                NODE_IMAGE: 'node:16.15.0'
+            dockerfile: docker/dockerfiles/php/Dockerfile
+        image: template_docker_app:1656064886
+        container_name: template_docker_app
+        hostname: localhost
+        environment:
+            TZ: Europe/Paris
+            APP_ENV: prod
+            CORS_ALLOW_ORIGIN: '*'
+            DATABASE_URL: 'mysql://username:password@template_docker_db:3306/template_docker?serverVersion=mariadb-10.7.3'
+            MAILER_DSN: smtp://localhost
+        networks:
+            - localNetwork
+            - webgateway
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.template_docker.rule=Host(`template_docker.dev.dsi.uca.fr`)
+            - traefik.http.routers.template_docker.entrypoints=webgateway
+            - traefik.docker.network=webgateway
+            - traefik.http.services.template_docker.loadbalancer.server.port=80
+    db:
+        image: 'mariadb:10.7.3'
+        container_name: template_docker_db
+        volumes:
+            - '/data/template_docker_db_data:/var/lib/mysql'
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MYSQL_DATABASE: template_docker
+            MYSQL_USER: username
+            MYSQL_PASSWORD: password
+        networks:
+            - localNetwork
+volumes:
+    db_data:
+        driver: local
+networks:
+    webgateway:
+        external: true
+    localNetwork:
+        name: template_docker_net
+        driver: bridge
