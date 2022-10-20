@@ -1,0 +1,86 @@
+# Image pour les tests + mise en cache + install des vendors
+# default:
+#     image: jakzal/phpqa:php8.1
+
+# cache:
+#     key: ${CI_COMMIT_REF_SLUG}
+#     paths:
+#         - vendor/
+
+# before_script:
+#     - export http_proxy=http://proxy.dsi.uca.fr:8080
+#     - export https_proxy=http://proxy.dsi.uca.fr:8080
+#     - export no_proxy=".uca.fr,localhost,gitlab.dsi.uca.fr,.dev.dsi.uca.fr"
+#     - composer install
+
+# Etape : SecurityChecker
+# security-checker:
+#     tags:
+#         - docker_dev
+#     image: jakzal/phpqa:php8.1
+#     stage: SecurityChecker
+#     script:
+#         - local-php-security-checker --path=./composer.lock
+#     allow_failure: false
+
+# Etape : CodingStandards
+# phpcs:
+#     tags:
+#         - docker_dev
+#     image: jakzal/phpqa:php8.1
+#     stage: CodingStandards
+#     needs: [security-checker]
+#     script:
+#         - phpcs -v --standard=PSR12 --ignore=./src/Kernel.php ./src
+#     allow_failure: false
+
+# phpstan:
+#     tags:
+#         - docker_dev
+#     image: jakzal/phpqa:php8.1
+#     stage: CodingStandards
+#     needs: [security-checker]
+#     script:
+#         - phpstan analyse ./src --level=1
+#     allow_failure: false
+
+# twig-linter:
+#     tags:
+#         - docker_dev
+#     image: jakzal/phpqa:php8.1
+#     stage: CodingStandards
+#     needs: [security-checker]
+#     script:
+#         - twig-linter lint ./templates
+#     allow_failure: false
+
+# Etape : UnitTests
+# phpunit:
+#     tags:
+#         - docker_dev
+#     image: jakzal/phpqa:php8.1
+#     stage: UnitTests
+#     needs: [security-checker, phpcs, phpstan, twig-linter]
+#     script:
+#         - php bin/phpunit
+#     allow_failure: false
+
+# Etape : Deployment
+deploy-docker-compose:
+   tags:
+      - bash_dev
+   stage: Deployment
+   script:
+      - echo "MAJ portainer via curl sur ${PORTAINER_WEBHOOK}"
+      - curl -Ss --request POST -k -w "204" --url ${PORTAINER_WEBHOOK}
+   only:
+    refs:
+      - master
+
+# Etapes de la CI
+stages:
+   #  - SecurityChecker
+   #  - CodingStandards
+   #  - UnitTests
+    - Deployment
+

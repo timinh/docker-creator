@@ -1,2 +1,14 @@
 #!/bin/bash -e
-echo "init"
+echo "Nom du projet (pas d'espaces, d'accents, etc.) : "
+read projectName
+echo "projet : $projectName"
+cp -R config/* public/
+cp -R config/.docker public/
+cp config/.env public/
+sed -i "s/XXXXX/$projectName/g" public/.env
+chmod -R 777 public/
+
+# sh bin/create-docker-compose.sh
+echo "Votre projet a été initialisé, vous pouvez ajouter un premier conteneur en utilisant 'make add-container'"
+echo "Pour démarrer la stack, utilisez 'make start'"
+echo "N'oubliez pas de compléter la doc dans le README.md"
