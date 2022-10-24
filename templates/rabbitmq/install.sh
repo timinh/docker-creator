@@ -8,5 +8,8 @@ function install() {
 }
 
 function unInstall() {
-	echo "désinstallation du container rabbitmq"
+	echo "désinstallation du container rabbitmq..."
+	sed '/###> rabbitmq ###/,/### rabbitmq ###/d' public/docker-compose.override.yml -i
+	sed '/###> rabbitmq ###/,/### rabbitmq ###/d' public/docker-compose.yml -i
+	echo "le container rabbitmq a été désinstallé."
 }

@@ -9,5 +9,8 @@ function install() {
 }
 
 function unInstall() {
-	echo "désinstallation des containers elasticsearch/kibana"
+	echo "désinstallation des containers elasticsearch/kibana..."
+	sed '/###> elasticsearch ###/,/### elasticsearch ###/d' public/docker-compose.override.yml -i
+	sed '/###> elasticsearch ###/,/### elasticsearch ###/d' public/docker-compose.yml -i
+	echo "les containers elasticsearch/kibana ont été désinstallés."
 }

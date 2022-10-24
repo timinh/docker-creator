@@ -6,5 +6,8 @@ function install() {
 }
 
 function unInstall() {
-	echo "désinstallation du container mariadb"
+	echo "désinstallation du container mariadb..."
+	sed '/###> mariadb ###/,/### mariadb ###/d' public/docker-compose.override.yml -i
+	sed '/###> mariadb ###/,/### mariadb ###/d' public/docker-compose.yml -i
+	echo "le container mariadb a été désinstallé."
 }

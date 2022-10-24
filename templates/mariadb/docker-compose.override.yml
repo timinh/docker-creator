@@ -1,5 +1,5 @@
-    ### mariadb ###
+    ###> mariadb ###
     db:
         ports:
             - '3306:3306'
-    ###> mariadb ###
+    ### mariadb ###

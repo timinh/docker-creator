@@ -5,5 +5,7 @@ function install() {
 }
 
 function unInstall() {
-	echo "désinstallation du container maildev"
+	echo "désinstallation du container maildev..."
+	sed '/###> maildev ###/,/### maildev ###/d' public/docker-compose.override.yml -i
+	echo "le container maildev a été désinstallé."
 }

@@ -6,5 +6,8 @@ function install() {
 }
 
 function unInstall() {
-	echo "désinstallation du container nodejs"
+	echo "désinstallation du container nodejs..."
+	sed '/###> nodejs ###/,/### nodejs ###/d' public/docker-compose.override.yml -i
+    sed -i 's/APP_DOCKERFILE=.*/APP_DOCKERFILE=.docker\/dockerfiles\/php\/Dockerfile/' public/.env
+	echo "le container nodejs a été désinstallé."
 }

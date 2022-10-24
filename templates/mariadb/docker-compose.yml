@@ -1,4 +1,4 @@
-    ### mariadb ###
+    ###> mariadb ###
     db:
         image: '${DB_IMAGE}:${DB_VERSION}'
         container_name: ${APP_NAME}_db
@@ -9,4 +9,4 @@
             MYSQL_DATABASE: ${APP_NAME}
             MYSQL_USER: ${DB_USER}
             MYSQL_PASSWORD: ${DB_PASSWORD}
-    ###> mariadb ###
+    ### mariadb ###
