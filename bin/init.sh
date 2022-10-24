@@ -11,6 +11,7 @@ cp -R config/* public/
 cp -R config/.docker public/
 cp config/.env public/
 sed -i "s/XXXXX/$projectName/g" public/.env
+sed -i "s/XXXXX/$projectName/g" public/README.md
 sed -i "s/YYYYY/\/$appFolder/g" public/.env
 chmod -R 777 public/
 
