@@ -4,11 +4,10 @@ services:
 ###> containers ###
 ### containers ###
 
+
 ###> volumes ###
 ### volumes ###
+
 networks:
   webgateway:
-    external: true
   localNetwork:
-    name: ${APP_NAME}_net
-    driver: bridge

@@ -1,5 +1,6 @@
 ## Build image pour prod
 ARG APACHE_IMAGE
+ARG APP_FOLDER
 FROM ${APACHE_IMAGE}
 #Ajout des proxy pour contruire l'image
 ENV HTTP_PROXY http://proxy.dsi.uca.fr:8080
@@ -9,13 +10,13 @@ RUN export http_proxy=$HTTP_PROXY
 RUN export https_proxy=$HTTPS_PROXY
 RUN export no_proxy=$NO_PROXY
 
-COPY infra/apache/vhost.conf /etc/apache2/sites-enabled/000-default.conf
-COPY infra/php/php.ini /usr/local/etc/php/conf.d/app.ini
-COPY ./app /var/www/html
-COPY infra/scripts/entrypoint.sh /var/www/entrypoint.sh
+COPY .docker/apache/vhost.conf /etc/apache2/sites-enabled/000-default.conf
+COPY .docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
+COPY ${APP_FOLDER} /var/www/html
+COPY .docker/scripts/entrypoint.sh /var/www/entrypoint.sh
 
 # Gestion crons
-COPY infra/cron /etc/cron.d/cron
+COPY .docker/cron /etc/cron.d/cron
 RUN chmod 0644 /etc/cron.d/cron
 RUN crontab /etc/cron.d/cron
 

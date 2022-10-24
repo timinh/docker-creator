@@ -1,11 +1,17 @@
 #!/bin/bash -e
-echo "Nom du projet (pas d'espaces, d'accents, etc.) : "
-read projectName
-echo "projet : $projectName"
+read -p "Nom du projet (en minuscules, sans espace, sans accent) [monprojet] : " projectName
+projectName=${projectName:-monprojet}
+
+read -p "Dossier de l'application [app] : " appFolder
+appFolder=${appFolder:-app}
+
+echo "projet : $projectName créé"
+
 cp -R config/* public/
 cp -R config/.docker public/
 cp config/.env public/
 sed -i "s/XXXXX/$projectName/g" public/.env
+sed -i "s/YYYYY/\/$appFolder/g" public/.env
 chmod -R 777 public/
 
 # sh bin/create-docker-compose.sh

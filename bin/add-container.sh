@@ -7,18 +7,26 @@ do
      basenames+=(${filename%.*})
 done
 
-PS3="Select a container: "
+PS3="Choisissez le container à ajouter : "
 
 select template in "${basenames[@]}" "Cancel" ; do 
     case $template in
-        "Cancel")
-            echo "Goodbye."
+        "Annuler")
+            echo "A bientôt."
             break
             ;;
-        *)
-            cat templates/${template}.yml > public/${template}.yml
-            echo "$template added to your stack."
-            break
-            ;;
+        *)            
+        TEMPLATE="templates/$template/install.sh"
+        if [ -f $TEMPLATE ];
+        then
+            source $TEMPLATE
+            unInstall && install
+            . bin/create-docker-compose.sh
+            chmod -R 777 public
+        else
+            echo "pas de script d'installation trouvé"
+        fi
+        break
+        ;;
     esac
 done

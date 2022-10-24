@@ -1,0 +1,14 @@
+    ###> nodejs ###
+    nodejs:
+        image: ${NODE_IMAGE}
+        working_dir: /home/node/app
+        container_name: ${APP_NAME}_front
+        command:
+            - /bin/sh
+            - '-c'
+            - 'yarn install && yarn dev'
+        volumes:
+            - './app/:/home/node/app:rw'
+        ports:
+            - '3000:3000'
+    ### nodejs ###

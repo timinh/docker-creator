@@ -15,31 +15,27 @@ help:
 
 ## —— Commandes disponibles     ———————————————————————————————————————————————
 add-container: ## Ajoute un container dans le docker-compose	
-	@docker run --rm -it -v $PWD:/app/public:rw timinh/docker-creator add-container
+	@docker run --rm -it -v $(PWD):/app/public:rw timinh/docker-creator add-container
 .PHONY: add-container
 
 remove-container: ## Supprime un container dans le docker-compose	
-	@docker run --rm -it -v $PWD:/app/public:rw timinh/docker-creator remove-container
+	@docker run --rm -it -v $(PWD):/app/public:rw timinh/docker-creator remove-container
 .PHONY: remove-container
 
 enable-ci: ## Ajoute le fichier d'intégration continue à la racine du projet
-	@docker run --rm -it -v $PWD:/app/public:rw timinh/docker-creator enable-ci
+	@docker run --rm -it -v $(PWD):/app/public:rw timinh/docker-creator enable-ci
 .PHONY: enable-ci
 
 ## —— Docker 🐳  ———————————————————————————————————————————————————————————————
 start:	## Lancer les containers docker (en mode dev)
-	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d --build
+	$(DOCKER_COMPOSE) up -d --build
 .PHONY: start
 
 stop:	## Arréter les containers docker
-	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) stop
+	$(DOCKER_COMPOSE) down rm -f
 .PHONY: stop
 
-rm:	stop ## Supprimer les containers docker
-	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) rm -f
-.PHONY: rm
-
-restart: rm start	## redémarrer les containers (en mode dev)
+restart: stop start	## redémarrer les containers (en mode dev)
 .PHONY: restart
 
 bash:	## Connexion au container
@@ -55,16 +51,16 @@ ps: ## Affiche les containers docker
 .PHONY: ps
 
 prod:	## Builde et lance les containers docker (en mode prod)
-	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_PROD_FILE) up -d --build --force-recreate
+	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d --build --force-recreate
 .PHONY: prod
 
 compose: ## Génère un docker-compose.yml avec les variables utiles l'intégration dans portainer
-	@./makers/scripts/create-docker-compose.sh
+	@docker run --rm -it -v $(PWD):/app/public:rw timinh/docker-creator create-docker-compose
 .PHONY: compose
 
 ## —— Composer 🎵 ——————————————————————————————————————————————————————————————
 create-skeleton: ## Création d'un projet symfony skeleton dans le dossier app
-	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) rm -Rf public
+	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) rm -Rf .
 	$(COMPOSER) create-project symfony/skeleton:"$(SYMFONY_VERSION)" .
 	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) chmod -R 777 /var/www/html
 .PHONY: create-skeleton
@@ -75,7 +71,7 @@ create-symfony: create-skeleton ## Création d'un projet symfony complet dans le
 .PHONY: create-symfony
 
 create-symfony-vue: ## Création d'un projet full-stack symfony 6 / vue 3 (SPA)
-	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) rm -Rf public
+	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) rm -Rf .
 	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) git clone https://github.com/timinh/template-symfony-vite.git .
 	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) chmod -R 777 /var/www/html
 	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) rm -R /var/www/html/.git
@@ -99,9 +95,5 @@ clean-vendor: ## Suppression du répertoire vendor puis un réinstall
 ## —— Versioning 🛠️️ ———————————————————————————————————————————————————————————————
 tag: ## Met à jour le tag dans le docker-compose (pour mise à jour en prod)
 	@sed -i "s/APP_TAG=*.*/APP_TAG=`date +%s`/g" .env
-	@./makers/scripts/create-docker-compose.sh
+	@docker run --rm -it -v $(PWD):/app/public:rw timinh/docker-creator create-docker-compose
 .PHONY: tag
-
-push: tag ## Création d'un tag + MAJ docker-compose + push gitlab
-	@./makers/scripts/create-commit.sh
-.PHONY: push

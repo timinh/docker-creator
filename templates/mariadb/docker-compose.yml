@@ -1,14 +1,12 @@
-### mariadb ###
+    ### mariadb ###
     db:
         image: '${DB_IMAGE}:${DB_VERSION}'
         container_name: ${APP_NAME}_db
         volumes:
-            - '/data/${APP_NAME}_db_data:/var/lib/mysql'
+            - '/data/${APP_NAME}/db_data:/var/lib/mysql'
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
             MYSQL_DATABASE: ${APP_NAME}
             MYSQL_USER: ${DB_USER}
             MYSQL_PASSWORD: ${DB_PASSWORD}
-        ports:
-            - '3306:3306'
-###> mariadb ###
+    ###> mariadb ###

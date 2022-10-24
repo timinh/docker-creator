@@ -1,0 +1,17 @@
+    ###> rabbitmq ###
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: rabbitmq
+        environment:
+            - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+            - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+        networks:
+            - localNetwork
+            - webgateway
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.${APP_NAME}.rule=Host(`rabbitmq-${APP_NAME}.${PROD_HOST_NAME}`)
+            - traefik.http.routers.${APP_NAME}.entrypoints=webgateway
+            - traefik.docker.network=webgateway
+            - traefik.http.services.${APP_NAME}.loadbalancer.server.port=5672
+    ### rabbitmq ###

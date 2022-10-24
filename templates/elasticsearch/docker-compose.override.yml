@@ -1,0 +1,8 @@
+    ###> elasticsearch ###
+    elasticsearch:
+        ports:
+            - '9200:9200'
+    kibana:
+        ports:
+            - '5601:5601'
+    ###> elasticsearch ###

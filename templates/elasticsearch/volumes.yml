@@ -1,0 +1,4 @@
+    ###> elasticsearch ###
+    esdata1:
+        driver: local
+    ### elasticsearch ###

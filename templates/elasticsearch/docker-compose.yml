@@ -1,0 +1,31 @@
+    ###> elasticsearch ###
+    elasticsearch:
+        image: ${ELASTICSEARCH_IMAGE}
+        container_name: elasticsearch
+        environment:
+            - cluster.name=${APP_NAME}-cluster
+            - bootstrap.memory_lock=true
+            - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        volumes:
+            - '/data/${APP_NAME}/esdata:/usr/share/elasticsearch/data'
+        networks:
+            - localNetwork
+    kibana:
+        image: ${KIBANA_IMAGE}
+        container_name: kibana
+        depends_on:
+            - elasticsearch
+        networks:
+            - localNetwork
+            - webgateway
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.${APP_NAME}.rule=Host(`kibana-${APP_NAME}.${PROD_HOST_NAME}`)
+            - traefik.http.routers.${APP_NAME}.entrypoints=webgateway
+            - traefik.docker.network=webgateway
+            - traefik.http.services.${APP_NAME}.loadbalancer.server.port=5601
+    ### elasticsearch ###
