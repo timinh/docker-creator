@@ -1,6 +1,5 @@
 ARG NODE_IMAGE
 ARG APACHE_IMAGE
-ARG APP_FOLDER
 ## Compilation js/css
 FROM ${NODE_IMAGE} as frontend
 #Ajout des proxy pour contruire l'image
@@ -13,11 +12,11 @@ RUN export no_proxy=$NO_PROXY
 
 WORKDIR /app
 
-COPY ${APP_FOLDER}/package*.json ./
+COPY ./app/package*.json ./
 RUN yarn
 
-COPY ${APP_FOLDER}/assets/ ./assets/
-COPY ${APP_FOLDER}/vite.config.js ./
+COPY ./app/assets/ ./assets/
+COPY ./app/vite.config.js ./
 
 RUN yarn build
 
@@ -33,7 +32,7 @@ RUN export no_proxy=$NO_PROXY
 
 COPY .docker/apache/vhost.conf /etc/apache2/sites-enabled/000-default.conf
 COPY .docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
-COPY ${APP_FOLDER} /var/www/html
+COPY ./app /var/www/html
 COPY .docker/scripts/entrypoint.sh /var/www/entrypoint.sh
 
 # Gestion crons

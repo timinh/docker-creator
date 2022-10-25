@@ -9,7 +9,7 @@
             - ./.docker/apache/vhost.conf:/etc/apache2/sites-available/000-default.conf
             - ./.docker/php/php.ini:/usr/local/etc/php/conf.d/app.ini
             - ./.docker/scripts/entrypoint_dev.sh:/var/www/entrypoint.sh
-            - ${APP_FOLDER}:/var/www/html:rw
+            - ./app/:/var/www/html:rw
         ports:
             - "80:80"
     ### apache-php ###

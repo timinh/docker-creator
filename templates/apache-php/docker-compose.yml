@@ -12,7 +12,6 @@
         environment:
             TZ: Europe/Paris
             APP_ENV: prod
-            APP_FOLDER: ${APP_FOLDER}
             CORS_ALLOW_ORIGIN: '*'
             DATABASE_URL: 'mysql://${DB_USER}:${DB_PASSWORD}@${APP_NAME}_db:3306/${APP_NAME}?serverVersion=${DB_IMAGE}-${DB_VERSION}'
             MAILER_DSN: ${MAILER_DSN_PROD}
