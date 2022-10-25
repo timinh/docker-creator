@@ -1,4 +1,5 @@
-    ###> elasticsearch ###
-    esdata1:
+    ###> volumes_elasticsearch ###
+volumes:
+    esdata:
         driver: local
-    ### elasticsearch ###
+    ### volumes_elasticsearch ###

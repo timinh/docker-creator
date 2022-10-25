@@ -3,13 +3,17 @@
         image: ${ELASTICSEARCH_IMAGE}
         container_name: elasticsearch
         environment:
-            - cluster.name=${APP_NAME}-cluster
-            - bootstrap.memory_lock=true
-            - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+            - xpack.security.enabled=false
+            - discovery.type=single-node
         ulimits:
             memlock:
                 soft: -1
                 hard: -1
+            nofile:
+                soft: 65536
+                hard: 65536
+        cap_add:
+            - IPC_LOCK
         volumes:
             - '/data/${APP_NAME}/esdata:/usr/share/elasticsearch/data'
         networks:
@@ -17,6 +21,8 @@
     kibana:
         image: ${KIBANA_IMAGE}
         container_name: kibana
+        environment:
+            - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
         depends_on:
             - elasticsearch
         networks:
