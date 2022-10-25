@@ -8,7 +8,7 @@
             dockerfile: ${APP_DOCKERFILE}
         image: ${APP_NAME}_app:${APP_TAG}
         container_name: ${APP_NAME}_app
-        hostname: ${APP_NAME}.${PROD_HOST_NAME}
+        hostname: ${APP_NAME}.${HOST_NAME}
         environment:
             TZ: Europe/Paris
             APP_ENV: prod
@@ -20,7 +20,7 @@
             - webgateway
         labels:
             - traefik.enable=true
-            - traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.${PROD_HOST_NAME}`)
+            - traefik.http.routers.${APP_NAME}.rule=Host(`${APP_NAME}.${HOST_NAME}`)
             - traefik.http.routers.${APP_NAME}.entrypoints=webgateway
             - traefik.docker.network=webgateway
             - traefik.http.services.${APP_NAME}.loadbalancer.server.port=80
