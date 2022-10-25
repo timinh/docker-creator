@@ -1,6 +1,6 @@
     ###> rabbitmq ###
     rabbitmq:
-        image: rabbitmq:3-management
+        image: ${RABBITMQ_IMAGE}
         container_name: rabbitmq
         environment:
             - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}

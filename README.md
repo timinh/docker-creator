@@ -17,4 +17,6 @@ docker run --rm -it -v $PWD:/app/public:rw timinh/docker-creator
     - init
     - add-container
     - remove-container
+    - create-docker-compose
+    - enable-ci
     - update
