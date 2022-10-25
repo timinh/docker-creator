@@ -74,7 +74,7 @@ create-symfony-vue: ## Création d'un projet full-stack symfony 6 / vue 3 (SPA)
 	@$(DOCKER_EXEC) $(CONTAINER_NAME) git clone https://github.com/timinh/template-symfony-vite.git .
 	@$(DOCKER_EXEC) $(CONTAINER_NAME) chmod -R 777 /var/www/html
 	@$(DOCKER_EXEC) $(CONTAINER_NAME) rm -R /var/www/html/.git
-	@echo "Le template est installé, utilisez les commandes 'make rm' puis 'make add-container' pour ajouter nodejs à votre stack avant de la redémarrer"
+	@echo "Le template est installé, utilisez les commandes 'make stop' puis 'make add-container' pour ajouter nodejs à votre stack avant de la redémarrer"
 .PHONY: create-symfony-vue
 
 vendor-install:	## Installation des vendors
