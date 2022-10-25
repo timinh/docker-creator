@@ -13,6 +13,7 @@ cp config/.env public/
 sed -i "s/XXXXX/$projectName/g" public/.env
 sed -i "s/XXXXX/$projectName/g" public/README.md
 sed -i "s/YYYYY/\/$appFolder/g" public/.env
+mkdir public/$appFolder && mkdir public/$appFolder/public && cat config/index.php>public/$appFolder/public/index.php
 chmod -R 777 public/
 
 # sh bin/create-docker-compose.sh

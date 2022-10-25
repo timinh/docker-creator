@@ -21,6 +21,8 @@ select template in "${basenames[@]}" "Cancel" ; do
         then
             source $TEMPLATE
             unInstall
+            . bin/create-docker-compose.sh
+            chmod -R 777 public
         else
             echo "pas de script d'installation trouvé"
         fi

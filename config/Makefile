@@ -1,13 +1,12 @@
 .DEFAULT_GOAL = help
 
-CONTANER_NAME=$$(grep APP_NAME .env | cut -d '=' -f2-)_app
+CONTAINER_NAME=$$(grep APP_NAME .env | cut -d '=' -f2-)_app
 FRONTCONTAINER_NAME=$$(grep APP_NAME .env | cut -d '=' -f2-)_front
 SYMFONY_VERSION=$$(grep SYMFONY_VERSION .env | cut -d '=' -f2-)
 DOCKER_COMPOSE=@docker-compose
-DOCKER_COMPOSE_EXEC=@docker exec -it
-COMPOSER=$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) composer
-DOCKER_COMPOSE_FILE=docker-compose-dev.yml
-DOCKER_COMPOSE_PROD_FILE=docker-compose-prod.yml
+DOCKER_EXEC=@docker exec -it
+COMPOSER=$(DOCKER_EXEC) $(CONTAINER_NAME) composer
+DOCKER_COMPOSE_FILE=docker-compose.yml
 
 help:
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
@@ -32,18 +31,18 @@ start:	## Lancer les containers docker (en mode dev)
 .PHONY: start
 
 stop:	## Arréter les containers docker
-	$(DOCKER_COMPOSE) down rm -f
+	$(DOCKER_COMPOSE) down
 .PHONY: stop
 
 restart: stop start	## redémarrer les containers (en mode dev)
 .PHONY: restart
 
 bash:	## Connexion au container
-	$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) bash
+	$(DOCKER_EXEC) $(CONTAINER_NAME) bash
 .PHONY: bash
 
 bash-front:	## Connexion au container front (nodejs)
-	$(DOCKER_COMPOSE_EXEC) $(FRONTCONTAINER_NAME) bash
+	$(DOCKER_EXEC) $(FRONTCONTAINER_NAME) bash
 .PHONY: bash
 	
 ps: ## Affiche les containers docker
@@ -51,7 +50,7 @@ ps: ## Affiche les containers docker
 .PHONY: ps
 
 prod:	## Builde et lance les containers docker (en mode prod)
-	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d --build --force-recreate
+	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d --build
 .PHONY: prod
 
 compose: ## Génère un docker-compose.yml avec les variables utiles l'intégration dans portainer
@@ -60,23 +59,24 @@ compose: ## Génère un docker-compose.yml avec les variables utiles l'intégrat
 
 ## —— Composer 🎵 ——————————————————————————————————————————————————————————————
 create-skeleton: ## Création d'un projet symfony skeleton dans le dossier app
-	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) rm -Rf .
+	@$(DOCKER_EXEC) $(CONTAINER_NAME) rm -Rf public/
 	$(COMPOSER) create-project symfony/skeleton:"$(SYMFONY_VERSION)" .
-	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) chmod -R 777 /var/www/html
+	@$(DOCKER_EXEC) $(CONTAINER_NAME) chmod -R 777 /var/www/html
 .PHONY: create-skeleton
 
 create-symfony: create-skeleton ## Création d'un projet symfony complet dans le dossier app
 	$(COMPOSER) require webapp
-	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) chmod -R 777 /var/www/html
+	@$(DOCKER_EXEC) $(CONTAINER_NAME) chmod -R 777 /var/www/html
 .PHONY: create-symfony
 
 create-symfony-vue: ## Création d'un projet full-stack symfony 6 / vue 3 (SPA)
-	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) rm -Rf .
-	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) git clone https://github.com/timinh/template-symfony-vite.git .
-	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) chmod -R 777 /var/www/html
-	@$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) rm -R /var/www/html/.git
-	@echo "Le template est installé, utilisez les commandes 'make rm' puis 'make add-container' pour ajouter nodejs à votre stack avant de la redémarrer"
-.PHONY: create-spa
+	$(DOCKER_EXEC) $(CONTAINER_NAME) ls -all
+	# @$(DOCKER_EXEC) $(CONTAINER_NAME) rm -Rf public/
+	# @$(DOCKER_EXEC) $(CONTAINER_NAME) git clone https://github.com/timinh/template-symfony-vite.git .
+	# @$(DOCKER_EXEC) $(CONTAINER_NAME) chmod -R 777 /var/www/html
+	# @$(DOCKER_EXEC) $(CONTAINER_NAME) rm -R /var/www/html/.git
+	# @echo "Le template est installé, utilisez les commandes 'make rm' puis 'make add-container' pour ajouter nodejs à votre stack avant de la redémarrer"
+.PHONY: create-symfony-vue
 
 vendor-install:	## Installation des vendors
 	$(COMPOSER) install
@@ -87,8 +87,8 @@ vendor-update:	## Mise à jour des vendors
 .PHONY: vendor-update
 
 clean-vendor: ## Suppression du répertoire vendor puis un réinstall
-	$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) rm -Rf vendor
-	$(DOCKER_COMPOSE_EXEC) $(CONTANER_NAME) rm composer.lock
+	$(DOCKER_EXEC) $(CONTAINER_NAME) rm -Rf vendor
+	$(DOCKER_EXEC) $(CONTAINER_NAME) rm composer.lock
 	$(COMPOSER) install
 .PHONY: clean-vendor
 

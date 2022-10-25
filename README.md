@@ -10,7 +10,7 @@ docker run --rm -it -v $PWD:/app/public:rw timinh/docker-creator init
 Pour afficher la liste des commandes disponibles : 
 
 ```bash
-docker run -rm -it -v $PWD:/public:rw timinh/docker-creator
+docker run --rm -it -v $PWD:/app/public:rw timinh/docker-creator
 ```
 
 # Available commands
