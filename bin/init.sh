@@ -9,7 +9,6 @@ cp -R config/.docker public/
 cp config/.env public/
 sed -i "s/XXXXX/$projectName/g" public/.env
 sed -i "s/XXXXX/$projectName/g" public/README.md
-mkdir public/app && mkdir public/app/public && cat config/index.php>public/app/public/index.php
 chmod -R 777 public/
 
 # sh bin/create-docker-compose.sh
