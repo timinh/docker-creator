@@ -6,4 +6,6 @@
         ports:
             - '25:25'
             - '1080:80'
+        networks:
+            - localNetwork
     ### maildev ###

@@ -9,4 +9,7 @@
             MYSQL_DATABASE: ${APP_NAME}
             MYSQL_USER: ${DB_USER}
             MYSQL_PASSWORD: ${DB_PASSWORD}
+        networks:
+            - localNetwork
+            - webgateway
     ### mariadb ###
