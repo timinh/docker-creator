@@ -11,5 +11,6 @@ function unInstall() {
 	echo "désinstallation du container redis..."
 	sed '/###> redis ###/,/### redis ###/d' public/docker-compose.override.yml -i
 	sed '/###> redis ###/,/### redis ###/d' public/docker-compose.yml -i
+	sed '/###> volumes_redis ###/,/### volumes_redis ###/d' public/docker-compose.override.yml -i
 	echo "le container redis a été désinstallé."
 }

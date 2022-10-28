@@ -4,7 +4,7 @@
         restart: always
         command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
         volumes: 
-            - cache:/data
+            - '/data/${APP_NAME}/cache:/data'
         networks:
             - localNetwork
     ### redis ###

@@ -1,0 +1,5 @@
+    ###> volumes_redis ###
+volumes:
+    cache:
+        driver: local
+    ### volumes_redis ###
