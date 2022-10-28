@@ -1,0 +1,10 @@
+    ###> typesense ###
+    typesense:
+        restart: unless-stopped
+        image: ${TYPESENSE_IMAGE}
+        environment:
+            TYPESENSE_DATA_DIR: /data
+            TYPESENSE_API_KEY: ${TYPESENSE_API_KEY}
+        volumes:
+        - '/data/${APP_NAME}/search-data:/data'
+    ### typesense ###

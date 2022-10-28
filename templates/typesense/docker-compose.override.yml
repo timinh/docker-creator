@@ -1,0 +1,7 @@
+    ###> typesense ###
+    typesense:
+        volumes:
+            - 'search-data:/data'
+        ports:
+            - '8108:8108'
+    ### typesense ###
