@@ -5,7 +5,7 @@ A docker CLI tool to generate web projects
 Pour initialiser un projet, copier la ligne suivante dans un terminal : 
 
 ```bash
-docker run --rm -it -v $PWD:/app/public:rw timinh/docker-creator init
+docker pull timinh/docker-creator && docker run --rm -it -v $PWD:/app/public:rw timinh/docker-creator init
 ```
 Pour afficher la liste des commandes disponibles : 
 

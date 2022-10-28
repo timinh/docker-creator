@@ -5,6 +5,12 @@ projectName=${projectName:-monprojet}
 echo "projet : $projectName créé"
 
 cp -R config/* public/
+
+if [[ ! -d "public/app" ]];
+then
+	cp -R app public/
+fi
+
 cp -R config/.docker public/
 cp config/.env public/
 sed -i "s/XXXXX/$projectName/g" public/.env
