@@ -3,7 +3,6 @@
         image: ${APP_NAME}_app
         hostname: localhost
         environment:
-            TZ: Europe/Paris
             APP_ENV: dev
         volumes:
             - ./.docker/apache/vhost.conf:/etc/apache2/sites-available/000-default.conf
