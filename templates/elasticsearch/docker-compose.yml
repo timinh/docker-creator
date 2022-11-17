@@ -9,7 +9,7 @@
             - '/usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-icu; /usr/local/bin/docker-entrypoint.sh'
         environment:
             - node.name=elasticsearch01
-            - cluster.name=es-docker-cluster
+            - cluster.name=${APP_NAME}-es-cluster
             - discovery.seed_hosts=elasticsearch02,elasticsearch03
             - cluster.initial_master_nodes=elasticsearch01,elasticsearch02,elasticsearch03
             - bootstrap.memory_lock=true
@@ -33,7 +33,7 @@
             - '/usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-icu; /usr/local/bin/docker-entrypoint.sh'
         environment:
             - node.name=elasticsearch02
-            - cluster.name=es-docker-cluster
+            - cluster.name=${APP_NAME}-es-cluster
             - discovery.seed_hosts=elasticsearch01,elasticsearch03
             - cluster.initial_master_nodes=elasticsearch01,elasticsearch02,elasticsearch03
             - bootstrap.memory_lock=true
@@ -57,7 +57,7 @@
             - '/usr/share/elasticsearch/bin/elasticsearch-plugin install analysis-icu; /usr/local/bin/docker-entrypoint.sh'
         environment:
             - node.name=elasticsearch03
-            - cluster.name=es-docker-cluster
+            - cluster.name=${APP_NAME}-es-cluster
             - discovery.seed_hosts=elasticsearch01,elasticsearch02
             - cluster.initial_master_nodes=elasticsearch01,elasticsearch02,elasticsearch03
             - bootstrap.memory_lock=true
@@ -78,6 +78,8 @@
             - ELASTICSEARCH_HOSTS=["http://elasticsearch01:9200","http://elasticsearch02:9200","http://elasticsearch03:9200"]
         depends_on:
             - elasticsearch01
+            - elasticsearch02
+            - elasticsearch03
         networks:
             - localNetwork
             - webgateway
