@@ -6,7 +6,7 @@ SYMFONY_VERSION=$$(grep SYMFONY_VERSION .env | cut -d '=' -f2-)
 DOCKER_COMPOSE=@docker-compose
 DOCKER_EXEC=@docker exec -it
 COMPOSER=$(DOCKER_EXEC) $(CONTAINER_NAME) composer
-DOCKER_COMPOSE_FILE=docker-compose.yml
+DOCKER_COMPOSE_PROD_FILE=docker-compose.production.yml
 
 help:
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
@@ -37,7 +37,7 @@ stop:	## Arréter les containers docker
 restart: stop start	## redémarrer les containers (en mode dev)
 .PHONY: restart
 
-bash:	## Connexion au container
+bash: ## Connexion au container
 	$(DOCKER_EXEC) $(CONTAINER_NAME) bash
 .PHONY: bash
 
@@ -49,8 +49,8 @@ ps: ## Affiche les containers docker
 	@docker ps
 .PHONY: ps
 
-prod:	## Builde et lance les containers docker (en mode prod)
-	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d --build
+prod: compose ## Builde et lance les containers docker (en mode prod)
+	$(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_PROD_FILE) up -d --build
 .PHONY: prod
 
 compose: ## Génère un docker-compose.yml avec les variables utiles l'intégration dans portainer

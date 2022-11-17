@@ -30,3 +30,6 @@ docker run --rm -it -v $PWD:/app/public:rw timinh/docker-creator
     - typesense
     - maildev (en dev uniquement)
     - nodejs (en dev uniquement)
+
+# Todo :
+    - Ajouter containers nginx et php-fpm
