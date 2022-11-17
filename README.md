@@ -13,10 +13,20 @@ Pour afficher la liste des commandes disponibles :
 docker run --rm -it -v $PWD:/app/public:rw timinh/docker-creator
 ```
 
-# Available commands
+# Commandes disponibles :
     - init
     - add-container
     - remove-container
     - create-docker-compose
     - enable-ci
     - update
+
+# Container disponibles (via `add-container`) : 
+    - apache-php
+    - elasticsearch (cluster avec 3 nodes)
+    - mariadb
+    - rabbitmq
+    - redis
+    - typesense
+    - maildev (en dev uniquement)
+    - nodejs (en dev uniquement)
